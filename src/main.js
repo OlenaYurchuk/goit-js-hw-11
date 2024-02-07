@@ -43,7 +43,7 @@ function fetchImageCards(searchItems) {
                 if (data.totalHits === 0) {
                     iziToast.error({
                         position: 'topRight',
-                        message: 'Sorry, there are no images matching your search query. Please try again!'
+                        message: 'Sorry, there are no images matching <br/> your search query. Please try again!'
                     });
                 } else {
                     loaderEl.classList.add('hidden');
@@ -56,7 +56,6 @@ function fetchImageCards(searchItems) {
                 searchFormEl.reset();
             })
 }
-//     return fetch(`https://pixabay.com/api/?key=${KEY}&q=${searchItems}s&image_type=photo&orientation=horizontal&safesearch=true`)
 //         .then(response => {
 //             if (!response.ok) {
 //                 throw new Error(response.status);

@@ -152,3 +152,20 @@ section {
 .loader.hidden {
   display: none;
 }
+
+.iziToast > .iziToast-body .iziToast-message.slideIn {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0.03em;
+  color: #fafafb;
+}
+
+.iziToast > .iziToast-body .iziToast-icon.ico-error.revealIn {
+  display: none;
+}
+
+.iziToast > .iziToast-close {
+  background-color: #fff;
+}
