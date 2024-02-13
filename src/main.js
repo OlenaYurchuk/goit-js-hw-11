@@ -1,10 +1,9 @@
+import { fetchImageCards } from './js/render-functions.js';
+
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
-import { KEY } from "./js/api-key.js";
-
-
 
 const searchFormEl = document.querySelector('.search-form');
 const inputEl = document.querySelector('.search-field');
@@ -27,20 +26,17 @@ function onSearchForm(e) {
         clearAll();
         return;
     }
-    fetchImageCards(searchItems);
-}
-
-function fetchImageCards(searchItems) {
-      fetch(`https://pixabay.com/api/?key=${KEY}&q=${searchItems}s&image_type=photo&orientation=horizontal&safesearch=true`)
-            .then(response => {
+    fetchImageCards(searchItems)
+        .then(response => {
                 if (!response.ok) {
                  throw new Error(response.status);
                 }
                return response.json();
             })
-          .then(data => {
+            .then(data => {
               loaderEl.classList.remove('hidden');
-                if (data.totalHits === 0) {
+              if (data.hits.length === 0) {
+                    loaderEl.classList.add('hidden');
                     iziToast.error({
                         position: 'topRight',
                         message: 'Sorry, there are no images matching <br/> your search query. Please try again!'
@@ -54,9 +50,8 @@ function fetchImageCards(searchItems) {
             .catch((error) => console.log(error))
             .finally(() => {
                 searchFormEl.reset();
-            })
+            });
 }
-//         .then(response => {
 //             if (!response.ok) {
 //                 throw new Error(response.status);
 //             }
