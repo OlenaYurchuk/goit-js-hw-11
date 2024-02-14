@@ -52,32 +52,6 @@ function onSearchForm(e) {
                 searchFormEl.reset();
             });
 }
-//             if (!response.ok) {
-//                 throw new Error(response.status);
-//             }
-//             console.log(response.json());
-//             return response.json();
-//         })
-//         .catch((error) => console.log(error));
-// }
-
-// function createCard(cards) {
-//     const cardEl = cards[0];
-//     const readyCard = `<div class="card">
-//         <div class="card-top">
-//             <a class="card-link" href="${cardEl.largeImageURL}">
-//                 <img class="card-image" src="${cardEl.webformatURL}" alt="${cardEl.tags}">
-//             </a>
-//         </div>
-//         <div class="card-bottom">
-//             <p class="card-likes">Likes: <span class="card-value">${cardEl.likes}</span></p>
-//             <p class="card-views">Views: <span class="card-value">${cardEl.views}</span></p>
-//             <p class="card-comments">Comments: <span class="card-value">${cardEl.comments}</span></p>
-//             <p class="card-downloads">Downloads: <span class="card-value">${cardEl.downloads}</span></p>
-//         </div>
-//     </div>`
-//     div.innerHTML = readyCard;
-// };
 
 function createCardsList(cards) {
     
