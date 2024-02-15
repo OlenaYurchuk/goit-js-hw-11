@@ -1,4 +1,5 @@
-import { fetchImageCards } from './js/render-functions.js';
+import { KEY } from './js/pixabay-api.js';
+import { galleryEl, createCardsList } from './js/render-functions.js';
 
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
@@ -7,13 +8,10 @@ import "izitoast/dist/css/iziToast.min.css";
 
 const searchFormEl = document.querySelector('.search-form');
 const inputEl = document.querySelector('.search-field');
-const galleryEl = document.querySelector('.gallery');
 const loaderEl = document.querySelector('.loader');
 
 let searchItems = '';
 let lightbox = new SimpleLightbox('.gallery a', {});
-loaderEl.classList.add('hidden'); 
-
 
 searchFormEl.addEventListener('submit', onSearchForm);
 
@@ -27,13 +25,7 @@ function onSearchForm(e) {
         return;
     }
     fetchImageCards(searchItems)
-        .then(response => {
-                if (!response.ok) {
-                 throw new Error(response.status);
-                }
-               return response.json();
-            })
-            .then(data => {
+        .then(data => {
               loaderEl.classList.remove('hidden');
               if (data.hits.length === 0) {
                     loaderEl.classList.add('hidden');
@@ -46,33 +38,22 @@ function onSearchForm(e) {
                     createCardsList(data.hits);
                     lightbox.refresh();
                 }
-            })
-            .catch((error) => console.log(error))
-            .finally(() => {
-                searchFormEl.reset();
-            });
+        })
+        .catch((error) => console.log(error))
+        .finally(() => {
+            searchFormEl.reset();
+        });
+        
 }
-
-function createCardsList(cards) {
-    
-    const markup = cards.map(card => 
-        `<li class="gallery-item">
-             <div class="card-top">
-            <a class="card-link" href="${card.largeImageURL}">
-                <img class="card-image" src="${card.webformatURL}" alt="${card.tags}">
-            </a>
-        </div>
-        <div class="card-bottom">
-            <p class="card-likes">Likes <span class="card-value">${card.likes}</span></p>
-            <p class="card-views">Views <span class="card-value">${card.views}</span></p>
-            <p class="card-comments">Comments <span class="card-value">${card.comments}</span></p>
-            <p class="card-downloads">Downloads <span class="card-value">${card.downloads}</span></p>
-        </div>
-        </li>`
-    ).join('');
-
-    galleryEl.insertAdjacentHTML('beforeend', markup);
-};
+function fetchImageCards(searchItems) {
+    return fetch(`https://pixabay.com/api/?key=${KEY}&q=${searchItems}s&image_type=photo&orientation=horizontal&safesearch=true`)
+        .then(response => {
+            if (!response.ok) {
+                 throw new Error(response.status);
+            }
+               return response.json();
+            })
+}
 
 function clearAll() {
     galleryEl.innerHTML = '';
