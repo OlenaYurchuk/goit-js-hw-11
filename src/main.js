@@ -25,26 +25,10 @@ function onSearchForm(e) {
         return;
     }
     fetchImageCards(searchItems)
-        .then(data => {
-              loaderEl.classList.remove('hidden');
-              if (data.hits.length === 0) {
-                    loaderEl.classList.add('hidden');
-                    iziToast.error({
-                        position: 'topRight',
-                        message: 'Sorry, there are no images matching <br/> your search query. Please try again!'
-                    });
-                } else {
-                    loaderEl.classList.add('hidden');
-                    createCardsList(data.hits);
-                    lightbox.refresh();
-                }
-        })
-        .catch((error) => console.log(error))
-        .finally(() => {
-            searchFormEl.reset();
-        });
-        
+    
+    searchFormEl.reset();       
 }
+
 function fetchImageCards(searchItems) {
     return fetch(`https://pixabay.com/api/?key=${KEY}&q=${searchItems}&image_type=photo&orientation=horizontal&safesearch=true`)
         .then(response => {
@@ -52,7 +36,22 @@ function fetchImageCards(searchItems) {
                  throw new Error(response.status);
             }
                return response.json();
-            })
+        })
+        .then(data => {
+              loaderEl.classList.remove('hidden');
+            if (data.hits.length === 0) {
+                loaderEl.classList.add('hidden');
+                iziToast.error({
+                    position: 'topRight',
+                    message: 'Sorry, there are no images matching <br/> your search query. Please try again!'
+                });
+            } else {
+                loaderEl.classList.add('hidden');
+                createCardsList(data.hits);
+                lightbox.refresh();
+            }
+        })
+        .catch((error) => console.log(error))
 }
 
 function clearAll() {
