@@ -51,7 +51,13 @@ function fetchImageCards(searchItems) {
                 lightbox.refresh();
             }
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+            loaderEl.classList.add('hidden');
+            iziToast.error({
+                position: 'topRight',
+                message: 'Something went wrong. Please try again!'
+            });
+        })
 }
 
 function clearAll() {
