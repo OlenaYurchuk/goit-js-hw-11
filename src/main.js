@@ -10,7 +10,7 @@ const searchFormEl = document.querySelector('.search-form');
 const inputEl = document.querySelector('.search-field');
 const loaderEl = document.querySelector('.loader');
 
-let searchItems = '';
+let searchQuery = '';
 let lightbox = new SimpleLightbox('.gallery a', {});
 
 searchFormEl.addEventListener('submit', onSearchForm);
@@ -18,19 +18,21 @@ searchFormEl.addEventListener('submit', onSearchForm);
 function onSearchForm(e) {
     e.preventDefault();
     galleryEl.innerHTML = '';
-    searchItems = inputEl.value.trim();
+    searchQuery = inputEl.value.trim();
 
-    if (searchItems === '') {
+    if (searchQuery === '') {
         clearAll();
         return;
     }
-    fetchImageCards(searchItems)
+    fetchImageCards(searchQuery)
     
     searchFormEl.reset();       
 }
 
-function fetchImageCards(searchItems) {
-    return fetch(`https://pixabay.com/api/?key=${KEY}&q=${searchItems}&image_type=photo&orientation=horizontal&safesearch=true`)
+function fetchImageCards(searchQuery) {
+    clearAll();
+    showLoader();
+    return fetch(`https://pixabay.com/api/?key=${KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true`)
         .then(response => {
             if (!response.ok) {
                  throw new Error(response.status);
@@ -38,21 +40,20 @@ function fetchImageCards(searchItems) {
                return response.json();
         })
         .then(data => {
-              loaderEl.classList.remove('hidden');
             if (data.hits.length === 0) {
-                loaderEl.classList.add('hidden');
+                hideLoader();
                 iziToast.error({
                     position: 'topRight',
                     message: 'Sorry, there are no images matching <br/> your search query. Please try again!'
                 });
             } else {
-                loaderEl.classList.add('hidden');
+                hideLoader();
                 createCardsList(data.hits);
                 lightbox.refresh();
             }
         })
         .catch((error) => {
-            loaderEl.classList.add('hidden');
+            hideLoader();
             iziToast.error({
                 position: 'topRight',
                 message: 'Something went wrong. Please try again!'
@@ -62,4 +63,12 @@ function fetchImageCards(searchItems) {
 
 function clearAll() {
     galleryEl.innerHTML = '';
+}
+
+function showLoader() {
+    loaderEl.classList.remove('hidden');
+}
+
+function hideLoader() {
+    loaderEl.classList.add('hidden');
 }
