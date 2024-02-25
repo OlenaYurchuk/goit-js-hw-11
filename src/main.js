@@ -21,7 +21,10 @@ function onSearchForm(e) {
     searchQuery = inputEl.value.trim();
 
     if (searchQuery === '') {
-        clearAll();
+        iziToast.error({
+            position: 'topRight',
+            message: 'Please enter a search term.'
+          });
         return;
     }
     fetchImageCards(searchQuery)
@@ -42,8 +45,9 @@ function fetchImageCards(searchQuery) {
         .then(data => {
             if (data.hits.length === 0) {
                 hideLoader();
-                iziToast.error({
+                iziToast.info({
                     position: 'topRight',
+                    messageColor: 'black',
                     message: 'Sorry, there are no images matching <br/> your search query. Please try again!'
                 });
             } else {
